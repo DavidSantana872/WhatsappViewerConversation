@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@3.0.0/dist/flowbite.min.css" rel="stylesheet" />
+    <script src="./functions.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>Whatsapp Viewer Conversation 1.0</title>
+</head>
+<body>
+<div class="max-w-sm mx-auto mt-6">
+    <h1 class="flex items-center text-4xl font-extrabold dark:text-white">
+        Whatsapp Viewer Conversation 1.0
+    </h1>
+    <h6 class="text-sm font-medium text-gray-500 dark:text-gray-400">
+        Created by <a href="https://github.com/DavidSantana872" class="text-blue-500 hover:underline">David Santana</a>
+    </h6>
+    <br>
+    <div class="mb-5 " id="sectionInputFile">        
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload File</label>
+        <input id="inputConversation" class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="small_size" type="file">        
+    </div>
+    <div class="mb-5 " style="display: none;" id="sectionSelectWhoYouAre">
+        <label for="you" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select who you are</label>
+        <select onchange="loadChats()"  id="underline_select" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+            <option selected disabled>Select who you are</option>
+        </select>
+    </div>
+    <button id="showConversationBtn"  onclick="showConversation()" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Mostrar</button>
+  </div>
+  <br>
+  <div class="sectionChats" id="sectionChats">
+    
+  </div>
+  <svg onclick="scrollToBottom()" id="btnScrollBottom" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle-fill" viewBox="0 0 16 16">
+    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
+  </svg>
+</body>
+</html>
