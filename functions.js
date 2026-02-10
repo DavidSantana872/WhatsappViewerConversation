@@ -1,78 +1,91 @@
 async function getPeopleConversation(){
-    let data = await getDataInput()
-    let data1 = data.split(' p. m. - ')
-    let data2 = data.split(' a. m. - ')
-    let i = data1.length - 1
-    let user1 = null
-    let user2 = null
-    for(let j = i; j > 0; j--){
-        let actual = data1[j]
-        actual = actual.split(':')
-        if (user1 == null){
-            user1 = actual[0]
-        }else{
-            user2 = actual[0]
-            if(user1 != user2){
-                break
-            }
+    let data = await getDataInput();
+    let messages = parseMessages(data);
+
+    let users = [];
+    for (let msg of messages){
+        if (!users.includes(msg.user)){
+            users.push(msg.user);
         }
+        if (users.length === 2) break;
     }
-    return [user1, user2]
+
+    return users;
 }
+
 async function getDataInput(){
     let file = document.getElementById('inputConversation').files[0];
     let data = await file.text();
     return data;
 }
+
+// parser REAL para WhatsApp
+function parseMessages(data){
+    const regex = /^(\d{1,2}\/\d{1,2}\/\d{2,4}.*?) - ([^:]+): (.*)$/gm;
+    let matches;
+    const messages = [];
+
+    while ((matches = regex.exec(data)) !== null) {
+        messages.push({
+            datetime: matches[1].trim(),
+            user: matches[2].trim(),
+            message: matches[3].trim()
+        });
+    }
+
+    return messages;
+}
+
 async function showConversation(){
-    // element index 0 is rigth and index 1 is left
-    let conversationUser = await getPeopleConversation()
-      
-    // ocultar entrada de archivos
-    document.getElementById('sectionInputFile').style.display = "none"
-    //sectionSelectWhoYouAre show
-    document.getElementById('sectionSelectWhoYouAre').style.display = "block"
-    // underline_select poner de hijos options
+
+    let conversationUser = await getPeopleConversation();
+
+    document.getElementById('sectionInputFile').style.display = "none";
+    document.getElementById('sectionSelectWhoYouAre').style.display = "block";
+
+    let select = document.getElementById("underline_select");
+    select.innerHTML = "";
+
     for (let user of conversationUser){
         let option = document.createElement("option");
         option.text = user;
         option.value = user;
-        document.getElementById("underline_select").appendChild(option);
+        select.appendChild(option);
     }
-    loadChats()
+
+    loadChats();
 }
 
 async function loadChats() {
-    document.getElementById("showConversationBtn").style.display = "none"
-    let you = document.getElementById('underline_select').value
-    // render chats
-    let data = await getDataInput()
-    data = data.split(`/${new Date().getFullYear()},`)
-    // clear 
 
-    let sectionChats = document.getElementById("sectionChats")
-    while (sectionChats.firstChild) {
-        sectionChats.removeChild(sectionChats.firstChild);
-    }
-    for (let chat of data){
-        
-        if(chat.length >= "9/1/2025, 9:55 p. m. -".length){  
-            let user = chat.split('-')[1].split(":")[0].trim()
-           
-            let chatElement = document.createElement('p')
-            chatElement.textContent = chat
-            // if user is you, class element is right
-            if (user === you) {
-                chatElement.classList.add('right');
-            } else {
-                chatElement.classList.add('left');
-            }
-            sectionChats.appendChild(chatElement)
+    document.getElementById("showConversationBtn").style.display = "none";
+
+    let you = document.getElementById('underline_select').value;
+    let data = await getDataInput();
+
+    let messages = parseMessages(data);
+
+    let sectionChats = document.getElementById("sectionChats");
+    sectionChats.innerHTML = "";
+
+    for (let msg of messages){
+
+        let chatElement = document.createElement('p');
+        chatElement.textContent = `${msg.datetime} - ${msg.user}: ${msg.message}`;
+
+        if (msg.user === you) {
+            chatElement.classList.add('right');
+        } else {
+            chatElement.classList.add('left');
         }
+
+        sectionChats.appendChild(chatElement);
     }
+
+    scrollToBottom();
 }
 
-    // Función para hacer scroll hasta el final
+// scroll
 function scrollToBottom() {
     window.scrollTo({
         top: document.body.scrollHeight,
