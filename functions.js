@@ -1,7 +1,7 @@
 async function getPeopleConversation(){
     let data = await getDataInput()
-    let data1 = data.split('p. m. - ')
-    let data2 = data.split('a. m. - ')
+    let data1 = data.split(' p. m. - ')
+    let data2 = data.split(' a. m. - ')
     let i = data1.length - 1
     let user1 = null
     let user2 = null
